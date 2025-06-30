@@ -21,6 +21,7 @@ database: Database = Database.load()
 @interactions.listen()
 async def on_startup():
     print("Bot started!")
+    update_voice_sessions.start()
 
 @Task.create(IntervalTrigger(minutes=1))
 async def update_voice_sessions():
