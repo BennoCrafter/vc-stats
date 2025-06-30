@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 
-bot = interactions.Client(intents=interactions.Intents.ALL)
+bot = interactions.Client(intents=interactions.Intents.DEFAULT)
 
 @interactions.listen()
 async def on_startup():
