@@ -13,11 +13,11 @@ async def on_startup():
 
 @interactions.listen(interactions.events.VoiceUserJoin)
 async def on_voice_user_join(event):
-    print(f"{event.user} joined {event.channel}")
+    print(f"{event.author} joined {event.channel}")
 
 @interactions.listen(interactions.events.VoiceUserLeave)
 async def on_voice_user_leave(event):
-    print(f"{event.user} left {event.channel}")
+    print(f"{event.author} left {event.channel}")
 
 
 bot.start(TOKEN)
