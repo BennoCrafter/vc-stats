@@ -32,11 +32,13 @@ async def update_voice_sessions():
 async def on_voice_user_join(event: interactions.events.VoiceUserJoin):
     print(f"{event.author} joined {event.channel}")
     database.start_voice_session(event.author.username, event.channel)
+    database.write()
 
 @interactions.listen(interactions.events.VoiceUserLeave)
 async def on_voice_user_leave(event: interactions.events.VoiceUserLeave):
     print(f"{event.author} left {event.channel}")
     database.end_voice_session(event.author.username)
+    database.write()
 
 @slash_command(
     name="vc-stats",
@@ -52,6 +54,17 @@ async def on_voice_user_leave(event: interactions.events.VoiceUserLeave):
 )
 async def vc_stats(ctx: SlashContext, user: Optional[Union[User, Member]] = None):
     user = user or ctx.author
-    await ctx.send(f"{str(database.get_user(user.username))}")
+    user_data = database.get_user(user.username)
+    total_seconds = int(user_data.total_voice_time())
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+    num_sessions = len(user_data.voice_sessions)
+    msg = (
+        f"**Voice Stats for {user.username}:**\n"
+        f"Total Time: **{hours}h {minutes}m {seconds}s**\n"
+        f"Sessions: **{num_sessions}**"
+    )
+    await ctx.send(msg)
 
 bot.start(TOKEN)

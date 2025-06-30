@@ -48,11 +48,11 @@ class Database:
         try:
             with open(database_path, "r") as f:
                 data = json.load(f)
-                return [UserData(**user_dict) for user_dict in data]
+                return [UserData.from_dict(user_dict) for user_dict in data]
         except FileNotFoundError:
             database_path.write_text("[]")
             return []
 
     def write(self):
         with open(database_path, "w") as f:
-            json.dump([user.__dict__ for user in self.users], f, indent=2)
+            json.dump([user.to_dict() for user in self.users], f, indent=2)
